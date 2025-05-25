@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HIV Drug Resistance Predictor</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 600px; margin: auto; }
+        textarea { width: 100%; height: 100px; margin-top: 10px; }
+        button { margin-top: 10px; padding: 10px 20px; }
+        .result { margin-top: 20px; padding: 10px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HIV Drug Resistance Predictor</h1>
+        <form id="predict-form">
+            <label for="sequence">Enter Amino Acid Sequence:</label>
+            <textarea id="sequence" name="sequence" required></textarea>
+            <button type="submit">Predict</button>
+        </form>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        document.getElementById("predict-form").onsubmit = async function(e) {
+            e.preventDefault();
+            const sequence = document.getElementById("sequence").value;
+            const formData = new FormData();
+            formData.append("sequence", sequence);
+
+            const res = await fetch("/predict", { method: "POST", body: formData });
+            const data = await res.json();
+
+            document.getElementById("result").innerHTML = 
+                "<strong>Predictions:</strong> " + data.predictions.join(", ");
+        };
+    </script>
+</body>
+</html>
